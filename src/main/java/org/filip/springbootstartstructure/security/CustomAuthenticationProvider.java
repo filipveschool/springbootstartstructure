@@ -18,12 +18,23 @@ public class CustomAuthenticationProvider extends DaoAuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication auth) throws AuthenticationException {
         //final String verificationCode = ((CustomWebAuthenticationDetails) auth.getDetails()).getVerificationCode();
-        final User user = userRepository.findByEmail(auth.getName());
+        User user = userRepository.findByEmail(auth.getName());
         if ((user == null)) {
             throw new BadCredentialsException("Invalid username or password");
         }
 
-        final Authentication result = super.authenticate(auth);
+        /*
+        // to verify verification code
+        if (user.isUsing2FA()) {
+            final Totp totp = new Totp(user.getSecret());
+            if (!isValidLong(verificationCode) || !totp.verify(verificationCode)) {
+                throw new BadCredentialsException("Invalid verification code");
+            }
+
+        }
+        */
+
+        Authentication result = super.authenticate(auth);
         return new UsernamePasswordAuthenticationToken(user, result.getCredentials(), result.getAuthorities());
     }
 

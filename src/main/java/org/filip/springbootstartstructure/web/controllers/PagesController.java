@@ -24,12 +24,13 @@ public class PagesController {
 
     @GetMapping(PageConstants.ROOT_URL)
     public String redirectToHomePage(){
-        return PageConstants.REDIRECT_START_PAGE;
+        return PageConstants.INDEX_LOCATION_TEMPLATE;
     }
 
     @GetMapping(PageConstants.HOME_PAGE_URL)
     public String goToHomePage(){
-        return PageConstants.HOME_PAGE_URL;
+        //return PageConstants.HOME_PAGE_URL;
+        return PageConstants.INDEX_LOCATION_TEMPLATE;
     }
 
     @GetMapping(PageConstants.ABOUT_PAGE_URL)
@@ -38,6 +39,11 @@ public class PagesController {
 
         //return "pages/about";
         return PageConstants.ABOUT_PAGE_LOCATION_TEMPLATE;
+    }
+
+    @GetMapping(PageConstants.LOGIN_PAGE_URL)
+    public String goToLoginPage(){
+        return PageConstants.LOGIN_PAGE_LOCATION_TEMPLATE;
     }
 
 }

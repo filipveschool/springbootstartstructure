@@ -1,12 +1,14 @@
 package org.filip.springbootstartstructure.config;
 
 import org.filip.springbootstartstructure.security.CustomAuthenticationProvider;
+import org.filip.springbootstartstructure.security.google2fa.CustomWebAuthenticationDetailsSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.session.SessionRegistry;
@@ -16,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -30,6 +33,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private AuthenticationFailureHandler authenticationFailureHandler;
 
+    @Autowired
+    private LogoutSuccessHandler myLogoutSuccessHandler;
+
+    @Autowired
+    private CustomWebAuthenticationDetailsSource authenticationDetailsSource;
+
     public SecurityConfig() {
         super();
     }
@@ -39,6 +48,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(authProvider());
     }
 
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring()
+                .antMatchers(
+                        "/resources/**", // Laat toegang tot alle resources to
+                        "/webjars/**" // laat access tot de webjars toe
+                        );
+    }
 
     /**
      * This allows us to configure static resources, form authentication login and logut configuration
@@ -51,6 +68,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // Allow stuff
 
         http
+                .csrf().disable()
                 .authorizeRequests()
                 // Any user can access a request if the URL starts with "/" or "/js/" or "/css" or "/img/" or "/webjars"
                 .antMatchers("/","/js/**","/css/**","/img/**","/webjars/**").permitAll()
@@ -90,7 +108,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // Any URL that starts with "/user/" will be restricted to users who have the role
                 // "USER". You will notice that since we are invoking the hasRole method we do not need to
                 // specify the "ROLE_" prefix.
-                .antMatchers("/user/**").hasRole("USER")
+                //.antMatchers("/user/**").hasRole("USER")
                 // Any URL that has not already been matched on only requires that the user be authenticated
                 .anyRequest().authenticated()
                 .and()
@@ -107,10 +125,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //TO DO some actions after you are successfully loggedin
                 .successHandler(myAuthenticationSuccessHandler)
                 .failureHandler(authenticationFailureHandler)
+                // TODO new stuff
+                .authenticationDetailsSource(authenticationDetailsSource)
                 .permitAll()
                 .and()
                 .sessionManagement()
-                .invalidSessionUrl("/invalidSession.html")
+                //.invalidSessionUrl("/invalidSession.html")
+                .invalidSessionUrl("/invalidSession")
                 .maximumSessions(1).sessionRegistry(sessionRegistry()).and()
                 .sessionFixation().none()
                 .and()
@@ -120,11 +141,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //.invalidateHttpSession(true)
                 .invalidateHttpSession(false)
                 //.clearAuthentication(true)
-                //.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 //The URL to redirect to after logout has occurred. The default is /login?logout.
-                //.logoutSuccessUrl("/login?logout")
-                .logoutSuccessUrl("/logout.html?logSucc=true")
-                //.logoutSuccessHandler(myLogoutSuccessHandler)
+                .logoutSuccessUrl("/login?logout")
+                //.logoutSuccessUrl("/logout.html?logSucc=true")
+                //.logoutSuccessUrl("/logout?logSucc=true")
+                .logoutSuccessHandler(myLogoutSuccessHandler)
+                .deleteCookies("JSESSIONID")
                 .permitAll();
         //.and()
         //.exceptionHandling();
@@ -141,6 +163,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     //BEANS
+
+    /**
+     * BCrypt, will internally generate a random salt instead.
+     * This is important to understand because it means that each call will have a different result,
+     * and so we need to only encode the password once.
+     *
+     * Gebruikt in:
+     *      - service/UserService
+     *      - setupDataLoader
+     */
     @Bean
     public PasswordEncoder encoder() {
         return new BCryptPasswordEncoder(11);

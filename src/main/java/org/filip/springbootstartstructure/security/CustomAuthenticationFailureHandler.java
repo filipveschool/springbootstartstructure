@@ -18,7 +18,7 @@ import java.util.Locale;
 public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
     @Autowired
-    private MessageSource messages;
+    private MessageSource messageSource;
 
     @Autowired
     private LocaleResolver localeResolver;
@@ -31,14 +31,14 @@ public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationF
 
         final Locale locale = localeResolver.resolveLocale(request);
 
-        String errorMessage = messages.getMessage("message.badCredentials", null, locale);
+        String errorMessage = messageSource.getMessage("message.badCredentials", null, locale);
 
         if (exception.getMessage().equalsIgnoreCase("User is disabled")) {
-            errorMessage = messages.getMessage("auth.message.disabled", null, locale);
+            errorMessage = messageSource.getMessage("auth.message.disabled", null, locale);
         } else if (exception.getMessage().equalsIgnoreCase("User account has expired")) {
-            errorMessage = messages.getMessage("auth.message.expired", null, locale);
+            errorMessage = messageSource.getMessage("auth.message.expired", null, locale);
         } else if (exception.getMessage().equalsIgnoreCase("blocked")) {
-            errorMessage = messages.getMessage("auth.message.blocked", null, locale);
+            errorMessage = messageSource.getMessage("auth.message.blocked", null, locale);
         }
 
         request.getSession().setAttribute(WebAttributes.AUTHENTICATION_EXCEPTION, errorMessage);

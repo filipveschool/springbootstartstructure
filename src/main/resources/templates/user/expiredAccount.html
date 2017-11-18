@@ -9,8 +9,9 @@
 <div layout:fragment="content" th:remove="tag">
 
     <div class="row">
-        <h1>This is a secured page!</h1>
-        <p><a href="/" th:href="@{/}">Back to home page</a></p>
+        <h1 class="alert alert-info" th:text="#{auth.message.expired}">expired</h1>
+        <br/>
+        <a class="btn btn-default" th:href="@{/registration.html}" th:text="#{label.form.loginSignUp}">signup</a>
     </div>
 
 </div>

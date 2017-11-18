@@ -3,15 +3,16 @@
       xmlns:th="http://www.thymeleaf.org"
       layout:decorate="~{fragments/layout}">
 <head>
-    <title>Secured</title>
+    <title>Registration</title>
 </head>
 <body>
 <div layout:fragment="content" th:remove="tag">
 
     <div class="row">
-        <h1>This is a secured page!</h1>
-        <p><a href="/" th:href="@{/}">Back to home page</a></p>
+        <h1 class="alert alert-success" th:text="#{message.regSucc}">success</h1>
+        <a th:href="@{/login}">login</a>
     </div>
+
 
 </div>
 </body>

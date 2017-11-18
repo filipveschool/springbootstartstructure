@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+/**
+ * Deze klasse wordt gebruikt nadat op de logout knop is geklikt als allereerste
+ */
 @Component("myLogoutSuccessHandler")
 public class MyLogoutSuccessHandler implements LogoutSuccessHandler {
 
@@ -29,5 +32,9 @@ public class MyLogoutSuccessHandler implements LogoutSuccessHandler {
         if(session != null) {
             session.removeAttribute("user");
         }
+
+        //response.sendRedirect("/logout.html?logSucc=true");
+        response.sendRedirect("/logout?logSucc=true");
+
     }
 }

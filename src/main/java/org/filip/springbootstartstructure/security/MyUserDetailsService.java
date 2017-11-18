@@ -30,8 +30,8 @@ public class MyUserDetailsService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
-    //@Autowired
-    //private LoginAttemptService loginAttemptService;
+    @Autowired
+    private LoginAttemptService loginAttemptService;
 
     @Autowired
     private HttpServletRequest request;
@@ -52,9 +52,9 @@ public class MyUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
         String ip = getClientIP();
-        //if (loginAttemptService.isBlocked(ip)) {
-        //  throw new RuntimeException("blocked");
-        //}
+        if (loginAttemptService.isBlocked(ip)) {
+            throw new RuntimeException("blocked");
+        }
 
         try {
             User user = userRepository.findByEmail(email);
