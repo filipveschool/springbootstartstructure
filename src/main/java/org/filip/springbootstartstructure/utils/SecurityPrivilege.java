@@ -3,7 +3,8 @@ package org.filip.springbootstartstructure.utils;
 public enum  SecurityPrivilege {
 
     READ_PRIVILEGE("READ_PRIVILEGE"),
-    WRITE_PRIVILEGE("WRITE_PRIVILEGE");
+    WRITE_PRIVILEGE("WRITE_PRIVILEGE"),
+    CHANGE_PASSWORD_PRIVILEGE("CHANGE_PASSWORD_PRIVILEGE");
 
     private String privilegeName;
 
