@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{fragments/layout}">
+<head>
+    <title>Overview of all users</title>
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+    <h1>Users list:</h1>
+    <p> Now is <b th:text="${execInfo.now.time}"></b> </p>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Email</th>
+            <th>FirstName</th>
+            <th>LastName</th>
+            <th>Roles</th>
+            <th>Enabled</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!--/*@thymesVar id="user" type="org.filip.goodspringbootworkingversion.domain.User"*/-->
+        <tr th:each="user : ${users}">
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.email}"></td>
+            <td th:text="${user.firstName}"></td>
+            <td th:text="${user.lastName}"></td>
+            <td th:text="${user.printRoles()}"></td>
+            <td th:text="${user.enabled}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+
+    <h1>This is a secured page!</h1>
+    <p><a href="/" th:href="@{/}">Back to home page</a></p>
+</div>
+</body>
+</html>

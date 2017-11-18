@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{fragments/layout}">
+<head>
+    <title>Error 500</title>
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+    <h1>Error 500</h1>
+    <p>Sorry, the required page cannot be found.</p>
+    <p><a href="/" th:href="@{/}">Back to home page</a></p>
+</div>
+</body>
+</html>

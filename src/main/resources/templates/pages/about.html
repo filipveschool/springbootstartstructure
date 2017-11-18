@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{fragments/layout}">
+<head>
+    <title th:text="#{pagetitle.about}">Index</title>
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+
+    <!--/*@thymesVar id="loggedUser" type="java.lang.String"*/-->
+    <!--/*@thymesVar id="loginTime" type="java.time.LocalDateTime"*/-->
+    <p><span th:text="#{about.loggeduser}">Logged user</span>: <span th:text="#{loggedUser}"></span></p>
+    <p><span th:text="#{about.logintime}">Logged user</span>: <span th:text="#{logintime}"></span></p>
+
+
+
+</div>
+</body>
+</html>

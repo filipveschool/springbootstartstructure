@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{fragments/layout}">
+<head>
+    <title>Access Denied</title>
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+    <h1 th:if="${errorMessage}" th:utext="${errorMessage}">Error java.lang.NullPointerException</h1>
+    <h1 th:if="!${errorMessage}">404 - <span th:text="#{exceptions.pagenotfound}">Page does not exist</span> </h1>
+    <p><a href="/" th:href="@{/}" th:text="#{links.backtohomepage}">Back to home page</a></p>
+</div>
+</body>
+</html>

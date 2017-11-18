@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{fragments/layout}">
+<head>
+    <title>InvalidSession</title>
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+
+    <div class="container">
+	    <h1 class="alert alert-danger" th:text="#{message.sessionExpired}">expired</h1>
+	    <a class="btn btn-primary" th:href="@{/login}">login</a>
+    </div>
+</div>
+</body>
+
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      layout:decorate="~{fragments/layout}">
+<head>
+    <title>Console</title>
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+
+    <div class="row">
+            <!--<div th:if="${param.message != null}" class="alert alert-info" th:text="${param.message[0]}">message</div>-->
+
+            <h1>This is the landing page for the admin</h1>
+
+            <div sec:authorize="hasAuthority('READ_PRIVILEGE')">This text is only visible to a user</div>
+
+            <div sec:authorize="hasAuthority('WRITE_PRIVILEGE')"> This text is only visible to an admin</div>
+
+            <a class="btn btn-default" th:href="@{/admin}">admin</a>
+            <br/>
+            <a class="btn btn-default" th:href="@{/changePassword}">change password</a>
+
+    </div>
+</div>
+</body>
+</html>

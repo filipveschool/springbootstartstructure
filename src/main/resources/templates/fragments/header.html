@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<body>
+<th:block th:fragment="header">
+    <nav class="navbar navbar-inverse navbar-static-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" th:href="@{/}">
+                    <img th:src="@{/img/logo.png}" alt="memorynotfound logo"/>
+                </a>
+            </div>
+            <div id="navbar" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li th:classappend="${#httpServletRequest.getRequestURI() == '/home' ? 'active' : '' }">
+                        <a th:href="@{/}" th:text="#{pagetitle.home}">Home</a>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <span>Language</span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="?lang=en" th:text="#{language.english}">Engels</a>
+                            </li>
+                            <li>
+                                <a href="?lang=nl" th:text="#{language.dutch}">Nederlands</a>
+                            </li>
+                            <li>
+                                <a href="?lang=es_ES" th:text="#{language.spanish}">Spaans</a>
+                            </li>
+                        </ul>
+                    </li>
+
+
+                    <li th:classappend="${#httpServletRequest.getRequestURI() == '/login' ? 'active' : '' }"
+                        sec:authorize="isAnonymous()">
+                        <a href="/login">Login</a>
+                    </li>
+                    <li th:classappend="${#httpServletRequest.getRequestURI() == '/registration' ? 'active' : '' }"
+                        sec:authorize="isAnonymous()">
+                        <a href="/registration">Registration</a>
+                    </li>
+                    <li sec:authorize="isAuthenticated()">
+                        <a href="javascript: document.logoutForm.submit()">Logout post</a>
+                        <form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">
+                            <input hidden type="submit" value="Sign Out">
+                        </form>
+                    </li>
+                    <li th:classappend="${#httpServletRequest.getRequestURI() == '/users/index' ? 'active' : '' }"
+                        sec:authorize="hasRole('ROLE_ADMIN')">
+                        <a th:href="@{/users/index}">Users overview</a>
+                    </li>
+                </ul>
+                <div class="nav navbar-nav navbar-right" id="logged-in-info" sec:authorize="isAuthenticated()">
+                    <span th:inline="text">Welcome <b>[[${#httpServletRequest.remoteUser}]]</b></span>
+                    <form method="post" th:text="@{/logout}">
+                        <input type="submit" th:value="logout" class="btn btn-danger"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </nav>
+</th:block>
+</body>
+</html>

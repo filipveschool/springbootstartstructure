@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      layout:decorate="~{fragments/layout}">
+<head>
+    <!--xmlns:sec="http://www.thymeleaf.org/extras/spring-security"-->
+    <title>Homepage loggedin normal user</title>
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+
+	<table>
+		<thead>
+		<tr>
+			<th>id</th>
+			<th>firstname</th>
+			<th>lastname</th>
+			<th>email</th>
+			<th>password</th>
+			<th>roles</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr>
+            <td th:text="${user.get().getId()}"></td>
+            <td th:text="${user.get().getFirstName()}"></td>
+            <td th:text="${user.get().getLastName()}"></td>
+            <td th:text="${user.get().getEmail()}"></td>
+            <td th:text="${user.get().getPassword()}"></td>
+            <td th:text="${user.get().getRoles()}"></td>
+            <!-- https://stackoverflow.com/questions/35090329/how-to-display-current-logged-in-users-information-in-all-templates-including-v -->
+		</tr>
+		</tbody>
+	</table>
+		<div sec:authorize="hasAuthority('WRITE_PRIVILEGE')" th:text="#{label.pages.user.message}">user</div>
+
+	    <div sec:authorize="hasAuthority('WRITE_PRIVILEGE')" th:text="#{label.pages.admin.message}"></div>
+	     
+	    <!--<p th:text="${param.user[0]}">user</p>-->
+	     
+	    <a class="btn btn-default" th:href="@{/admin}">admin</a>
+		<br /> <br />
+	    <a th:href="@{/loggedUsers}">View logged in users</a>
+		<br />	    
+	    <a th:href="@{/loggedUsersFromSessionRegistry}">View logged in users</a>
+	    
+</div>
+</body>
+</html>

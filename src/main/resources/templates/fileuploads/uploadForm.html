@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{fragments/layout}">
+<head>
+    <title>Login</title>
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+
+    <div th:if="${message}">
+        <h2 th:text="${message}"/>
+    </div>
+
+    <div>
+        <!-- This is a form to allow a user to upload files -->
+        <form method="POST" enctype="multipart/form-data" action="/filestorage/">
+            <table>
+                <tr><td>File to upload:</td><td><input type="file" name="file" /></td></tr>
+                <tr><td></td><td><input type="submit" value="Upload" /></td></tr>
+            </table>
+        </form>
+    </div>
+
+    <div>
+        <!-- this is to show a list of files supplied from the backend -->
+        <ul>
+            <li th:each="file : ${files}">
+                <a th:href="${file}" th:text="${file}" />
+            </li>
+        </ul>
+    </div>
+
+</div>
+</body>
+</html>
