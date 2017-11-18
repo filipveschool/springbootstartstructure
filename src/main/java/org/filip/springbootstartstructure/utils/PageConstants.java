@@ -2,11 +2,15 @@ package org.filip.springbootstartstructure.utils;
 
 public class PageConstants {
 
+    // PREFIX's FOR GENERAL CONTROLLER REQUESTMAPPINGS
+    public static final String MAIL_PREFIX_CONTROLLER = "/mail";
+
     //URL's
+    public static final String ROOT_URL = "/";
     public static final String ABOUT_PAGE_URL = "/about";
     public static final String LOGIN_PAGE_URL = "/login";
     public static final String HOME_PAGE_URL = "/home";
-    public static final String REGISTRATION_PAGE_URL = "/registration";
+    public static final String REGISTRATION_PAGE_URL = "/user/registration";
 
     public static final String ERROR_404_PAGE_URL = "error/404";
     public static final String ERROR_403_PAGE_URL = "error/403";

@@ -2,17 +2,20 @@ package org.filip.springbootstartstructure.web.apicontrollers;
 
 import org.filip.springbootstartstructure.domain.User;
 import org.filip.springbootstartstructure.exceptions.InvalidOldPasswordException;
+import org.filip.springbootstartstructure.exceptions.UserNotFoundException;
 import org.filip.springbootstartstructure.security.ActiveUserStore;
 import org.filip.springbootstartstructure.services.mailservice.EmailService;
 import org.filip.springbootstartstructure.services.userservice.IUserService;
 import org.filip.springbootstartstructure.utils.APIConstants;
 import org.filip.springbootstartstructure.utils.GenericResponse;
+import org.filip.springbootstartstructure.utils.StringHelper;
 import org.filip.springbootstartstructure.web.controllers.UserController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.core.env.Environment;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Locale;
@@ -119,11 +123,39 @@ public class ApiUserController {
         return new GenericResponse(messageSource.getMessage("message.updatePasswordSuccessful", null, locale));
     }
 
+    @PostMapping(APIConstants.RESET_PASSWORD_USER_URL)
+    @ResponseBody
+    public GenericResponse resetPassword(HttpServletRequest request,
+                                         @RequestParam("email") String userEmail){
+        User user = userService.findUserByEmail(userEmail);
+        if(user == null){
+            throw new UserNotFoundException();
+        }
+
+        String generatedPasswordResetToken = StringHelper.generateUUID();
+        userService.createPasswordResetTokenForUser(user, generatedPasswordResetToken);
+        sendConstructedResetTokenEmail(getAppUrl(request), request.getLocale(), generatedPasswordResetToken, user);
+        return new GenericResponse(messageSource.getMessage("message.resetPasswordEmail", null, request.getLocale()));
+    }
+
     /*************************************************
      * Delete Mappings
      *************************************************/
 
+    /*************************************************
+     * Custom functions
+     *************************************************/
 
+    private void sendConstructedResetTokenEmail(String contextPath, Locale locale, String token, User user){
+        String url = contextPath + "/user/changePassword?id=" + user.getId() + "&token=" + token;
+        String message = messageSource.getMessage("message.resetPassword", null, locale);
+        emailService.sendSimpleMessage(user.getEmail(), env.getProperty("support.email"),
+                "Reset Password", message + "\r\n" + url  );
+    }
+
+    private String getAppUrl(HttpServletRequest request) {
+        return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+    }
 
 
 
