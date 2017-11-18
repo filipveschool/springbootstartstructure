@@ -43,12 +43,24 @@ public class UserController {
         return PageConstants.OVERVIEW_LOGGED_USERS_LOCATION_TEMPLATE;
     }
 
+    @GetMapping(PageConstants.OVERVIEW_LOGGED_USERS_FROM_SESSION_REGISTRY_URL)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public String getLoggedUsersFromSessionRegistry(Locale locale, Model model){
+        model.addAttribute("users", userService.getUsersFromSessionRegistry());
+        return PageConstants.OVERVIEW_LOGGED_USERS_FROM_SESSION_REGISTRY_LOCATION_TEMPLATE;
+    }
+
     @GetMapping(PageConstants.OVERVIEW_ALL_USERS_URL)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String getAllUsersOverview(Model model){
         model.addAttribute("users", userService.findAll());
         return PageConstants.OVERVIEW_ALL_USERS_LOCATION_TEMPLATE;
     }
+
+
+
+
+
 
 
 

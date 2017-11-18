@@ -2,13 +2,16 @@ package org.filip.springbootstartstructure.services.userservice;
 
 import org.filip.springbootstartstructure.domain.PasswordResetToken;
 import org.filip.springbootstartstructure.domain.User;
+import org.filip.springbootstartstructure.domain.VerificationToken;
 import org.filip.springbootstartstructure.exceptions.UserAlreadyExistException;
 import org.filip.springbootstartstructure.web.dto.UserDto;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Optional;
 
+//public interface IUserService extends UserDetailsService {
 public interface IUserService {
 
     /*************************************************
@@ -38,6 +41,12 @@ public interface IUserService {
      * @param token
      */
     void createPasswordResetTokenForUser(User user, String token);
+
+
+    void createVerificationTokenForUser(User user, String token);
+
+    VerificationToken generateNewVerificationToken(String existingVerificationToken);
+
 
     /*************************************************
      * READ FUNCTIONS
@@ -87,6 +96,10 @@ public interface IUserService {
      */
     User getUserByPasswordResetToken(String token);
 
+    User getUser(String verificationToken);
+
+    VerificationToken getVerificationToken(String verificationToken);
+
     /**
      * Make A QR url for a user
      * @param user
@@ -95,7 +108,7 @@ public interface IUserService {
      */
     String generateQRUrl(User user) throws UnsupportedEncodingException;
 
-    List<String> getUserFromSessionRegistry();
+    List<String> getUsersFromSessionRegistry();
 
     /*************************************************
      * UPDATE FUNCTIONS
@@ -126,5 +139,7 @@ public interface IUserService {
      * @return
      */
     boolean checkIfValidOldPassword(User user, String oldPassword);
+
+    String validateVerificationToken(String token);
 
 }

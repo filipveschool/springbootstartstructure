@@ -9,13 +9,11 @@ import org.filip.springbootstartstructure.services.userservice.IUserService;
 import org.filip.springbootstartstructure.utils.APIConstants;
 import org.filip.springbootstartstructure.utils.GenericResponse;
 import org.filip.springbootstartstructure.utils.StringHelper;
-import org.filip.springbootstartstructure.web.controllers.UserController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.core.env.Environment;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -102,7 +100,7 @@ public class ApiUserController {
 
     @GetMapping("/sessionusers")
     public List<String> getUserFromSessionRegistry(){
-        return userService.getUserFromSessionRegistry();
+        return userService.getUsersFromSessionRegistry();
     }
 
 

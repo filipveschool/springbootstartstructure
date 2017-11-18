@@ -2,17 +2,22 @@ package org.filip.springbootstartstructure.services.userservice;
 
 import org.filip.springbootstartstructure.domain.PasswordResetToken;
 import org.filip.springbootstartstructure.domain.User;
+import org.filip.springbootstartstructure.domain.VerificationToken;
 import org.filip.springbootstartstructure.exceptions.UserAlreadyExistException;
 import org.filip.springbootstartstructure.persistence.repositories.PasswordResetTokenRepository;
 import org.filip.springbootstartstructure.persistence.repositories.PrivilegeRepository;
 import org.filip.springbootstartstructure.persistence.repositories.RoleRepository;
 import org.filip.springbootstartstructure.persistence.repositories.UserRepository;
+import org.filip.springbootstartstructure.persistence.repositories.VerificationTokenRepository;
 import org.filip.springbootstartstructure.utils.SecurityRole;
+import org.filip.springbootstartstructure.utils.TokenConstants;
 import org.filip.springbootstartstructure.web.dto.UserDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +25,10 @@ import javax.transaction.Transactional;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,6 +39,9 @@ public class UserServiceImpl implements IUserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private VerificationTokenRepository verificationTokenRepository;
 
     @Autowired
     private RoleRepository roleRepository;
@@ -59,7 +69,7 @@ public class UserServiceImpl implements IUserService {
     public User registerNewUserAccount(UserDto accountDto) throws UserAlreadyExistException {
         //Check for duplicated emails
 
-        if(emailExist(accountDto.getEmail())){
+        if (emailExist(accountDto.getEmail())) {
             log.info("registerNewUserAccount method in UserService class was executed.");
             log.info("Email address already exists: " + accountDto.getEmail());
             throw new UserAlreadyExistException("There is an account with that email address: " + accountDto.getEmail());
@@ -96,6 +106,21 @@ public class UserServiceImpl implements IUserService {
         passwordResetTokenRepository.save(new PasswordResetToken(token, user));
     }
 
+    @Override
+    public void createVerificationTokenForUser(User user, String token) {
+        VerificationToken myToken = new VerificationToken(token, user);
+        verificationTokenRepository.save(myToken);
+    }
+
+    @Override
+    public VerificationToken generateNewVerificationToken(String existingVerificationToken) {
+        VerificationToken vToken = verificationTokenRepository.findByToken(existingVerificationToken);
+        vToken.updateToken(UUID.randomUUID().toString());
+        vToken = verificationTokenRepository.save(vToken);
+        return vToken;
+    }
+
+
     /**
      * Find an existing user by looking up his email address
      *
@@ -113,7 +138,7 @@ public class UserServiceImpl implements IUserService {
      * @return the entity with the given id or {@literal Optional#empty()} if none found
      * @throws IllegalArgumentException if {@code id} is {@literal null}.
      */
-    public Optional<User> findById(Long id){
+    public Optional<User> findById(Long id) {
         return userRepository.findById(id);
     }
 
@@ -155,6 +180,22 @@ public class UserServiceImpl implements IUserService {
         return getPasswordResetToken(token).getUser();
     }
 
+    @Override
+    public User getUser(String verificationToken) {
+        VerificationToken token = verificationTokenRepository.findByToken(verificationToken);
+        if (token != null) {
+            return token.getUser();
+        }
+
+        return null;
+    }
+
+    @Override
+    public VerificationToken getVerificationToken(String verificationToken) {
+        return verificationTokenRepository.findByToken(verificationToken);
+    }
+
+
     /**
      * Make A QR url for a user
      *
@@ -170,7 +211,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public List<String> getUserFromSessionRegistry() {
+    public List<String> getUsersFromSessionRegistry() {
         return sessionRegistry.getAllPrincipals().stream().filter((u) -> !sessionRegistry.getAllSessions(u, false).isEmpty()).map(Object::toString).collect(Collectors.toList());
     }
 
@@ -213,10 +254,32 @@ public class UserServiceImpl implements IUserService {
         return passwordEncoder.matches(oldPassword, user.getPassword());
     }
 
+    @Override
+    public String validateVerificationToken(String token) {
+
+        VerificationToken verificationToken = verificationTokenRepository.findByToken(token);
+        if (verificationToken == null) {
+            return TokenConstants.TOKEN_INVALID.getTokenName();
+        }
+        User user = verificationToken.getUser();
+        Calendar cal = Calendar.getInstance();
+        if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime() <= 0)) {
+            verificationTokenRepository.delete(verificationToken);
+            return TokenConstants.TOKEN_EXPIRED.getTokenName();
+        }
+
+        user.setEnabled(true);
+        //verificationTokenRepository.delete(verificationToken);
+        userRepository.save(user);
+        return TokenConstants.TOKEN_VALID.getTokenName();
+    }
+
 
     // Extra functions
 
     private boolean emailExist(String email) {
         return userRepository.findByEmail(email) != null;
     }
+
+
 }

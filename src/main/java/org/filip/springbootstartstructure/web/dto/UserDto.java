@@ -1,11 +1,13 @@
 package org.filip.springbootstartstructure.web.dto;
 
+import org.filip.springbootstartstructure.validation.annotations.PasswordMatches;
+import org.filip.springbootstartstructure.validation.annotations.ValidEmail;
 import org.filip.springbootstartstructure.validation.annotations.ValidPassword;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-//@PasswordMatches
+@PasswordMatches
 public class UserDto {
     @NotNull
     @Size(min = 1)
@@ -22,7 +24,7 @@ public class UserDto {
     @Size(min = 1)
     private String matchingPassword;
 
-    //@ValidEmail
+    @ValidEmail
     @NotNull
     @Size(min = 1)
     private String email;
@@ -75,6 +77,12 @@ public class UserDto {
 
     public void setRole(Integer role) {
         this.role = role;
+    }
+
+    @Override
+    public String toString(){
+        return "UserDto met: Firstname: " + firstName + " - lastname: " + lastName + " - password: " +password
+                + " - matchingPassword: " + matchingPassword + " - email: " + email + " - role: " + role;
     }
 }
 

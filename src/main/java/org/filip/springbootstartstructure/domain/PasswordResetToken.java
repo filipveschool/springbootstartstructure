@@ -11,7 +11,13 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * Used for resetting the user's password
+ * This class is to create a token for resetting the user's password
+ *
+ * When a password reset is triggered –
+ * a token will be created and a special link containing
+ * this token will be emailed to the user.
+ *
+ * The token and the link will only be valid for a set period of time (24 hours in this example).
  */
 @Entity
 public class PasswordResetToken {
