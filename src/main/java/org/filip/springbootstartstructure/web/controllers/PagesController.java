@@ -46,4 +46,20 @@ public class PagesController {
         return PageConstants.LOGIN_PAGE_LOCATION_TEMPLATE;
     }
 
+    @GetMapping(PageConstants.EMAIL_ERROR_PAGE_URL)
+    public String goToEmailError(){
+        return PageConstants.EMAIL_ERROR_PAGE_LOCATION_TEMPLATE;
+    }
+
+    @GetMapping(PageConstants.BAD_USER_PAGE_URL)
+    public String goToBadUserPage(){
+        return PageConstants.BAD_USER_PAGE_LOCATION_TEMPLATE;
+    }
+
+    @GetMapping(PageConstants.QR_CODE_PAGE_URL)
+    public String goToQRPage(){
+        return PageConstants.QR_CODE_LOCATION_TEMPLATE;
+    }
+
+
 }

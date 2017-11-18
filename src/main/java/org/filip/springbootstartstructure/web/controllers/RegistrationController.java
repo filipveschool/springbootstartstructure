@@ -266,7 +266,7 @@ public class RegistrationController {
 
     private void sendConstructedResetVerificationTokenEmail(String contextPath, Locale locale, VerificationToken newToken, User user) {
         //String confirmationUrl = contextPath + "/old/registrationConfirm.html?token=" + newToken.getToken();
-        String confirmationUrl = contextPath + "/registrationConfirm?token=" + newToken.getToken();
+        String confirmationUrl = contextPath + "/user/registrationConfirm?token=" + newToken.getToken();
         String message = messageSource.getMessage("message.resendToken", null, locale);
 
         emailService.sendSimpleMessage(user.getEmail(),env.getProperty("support.email"),"Resend Registration Token", message + " \r\n" + confirmationUrl);

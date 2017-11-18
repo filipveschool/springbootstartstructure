@@ -47,8 +47,10 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         String message = messageSource.getMessage("message.regSucc", null, event.getLocale());
         //String confirmationUrl = event.getAppUrl() + "/registrationConfirm.html?token=" + token;
         String confirmationUrl = event.getAppUrl() + PageConstants.REGISTRATION_CONFIRMATION_PAGE_URL + "?token=" + token;
+
         emailService.sendSimpleMessage(user.getEmail(), env.getProperty("support.email"), "Registration confirmation",
                 message + "\r\n" + confirmationUrl
+
         );
     }
 }

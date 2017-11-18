@@ -77,6 +77,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(
                         "/login*",
                         "/mail/sendtest",
+                        "/mail/",
+
                         "/logout*",
                         "/console",
                         "/homepage",

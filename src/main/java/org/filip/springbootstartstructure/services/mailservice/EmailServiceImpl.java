@@ -1,5 +1,9 @@
 package org.filip.springbootstartstructure.services.mailservice;
 
+import org.filip.springbootstartstructure.web.controllers.PagesController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
@@ -15,8 +19,12 @@ import java.util.Objects;
 @Component
 public class EmailServiceImpl implements EmailService {
 
+    private static final Logger log = LoggerFactory.getLogger(EmailServiceImpl.class);
+
+
     private JavaMailSender emailSender;
 
+    @Autowired
     public EmailServiceImpl(JavaMailSender emailSender) {
         this.emailSender = emailSender;
     }
@@ -36,6 +44,7 @@ public class EmailServiceImpl implements EmailService {
             email.setText(text);
             email.setFrom(from);
             emailSender.send(email);
+            log.warn("sendsimplemessage sended");
         } catch (MailException exception) {
             exception.printStackTrace();
         }
