@@ -7,36 +7,47 @@
 </head>
 <body>
 <div layout:fragment="content" th:remove="tag">
-    <h1>Users list:</h1>
-    <p> Now is <b th:text="${execInfo.now.time}"></b> </p>
 
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Email</th>
-            <th>FirstName</th>
-            <th>LastName</th>
-            <th>Roles</th>
-            <th>Enabled</th>
-        </tr>
-        </thead>
-        <tbody>
-        <!--/*@thymesVar id="user" type="org.filip.goodspringbootworkingversion.domain.User"*/-->
-        <tr th:each="user : ${users}">
-            <td th:text="${user.id}"></td>
-            <td th:text="${user.email}"></td>
-            <td th:text="${user.firstName}"></td>
-            <td th:text="${user.lastName}"></td>
-            <td th:text="${user.printRoles()}"></td>
-            <td th:text="${user.enabled}"></td>
-        </tr>
-        </tbody>
-    </table>
+    <div class="row">
+
+        <div th:if="${not #lists.isEmpty(users)}" class="col-md-12">
+
+            <h1>Users list:</h1>
+            <a href="/users/create">Create a new user</a>
+            <p> Now is <b th:text="${execInfo.now.time}"></b></p>
+
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>FirstName</th>
+                    <th>LastName</th>
+                    <th>Roles</th>
+                    <th>Enabled</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!--/*@thymesVar id="user" type="org.filip.goodspringbootworkingversion.domain.User"*/-->
+                <tr th:each="user : ${users}">
+                    <td th:text="${user.email}"></td>
+                    <td th:text="${user.firstName}"></td>
+                    <td th:text="${user.lastName}"></td>
+                    <td th:text="${user.printRoles()}"></td>
+                    <td th:text="${user.enabled}"></td>
+                    <td><a th:href="${'/users/edit/' + user.id }" class="btn btn-default">Edit</a></td>
+                    <!--<td><a th:href="${'/users/editdirect/' + user.id }" class="btn btn-default">Editdirect</a></td>-->
+                    <td><a th:href="${'/users/delete/' + user.id }" class="btn btn-danger">Delete</a></td>
+                </tr>
+                </tbody>
+            </table>
 
 
-    <h1>This is a secured page!</h1>
-    <p><a href="/" th:href="@{/}">Back to home page</a></p>
+        </div>
+    </div>
+
+
 </div>
 </body>
 </html>

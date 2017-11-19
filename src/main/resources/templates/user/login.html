@@ -53,6 +53,69 @@
                     </div>
                 </div>
             </form>
+
+            <h1> Normal user</h1>
+            <form th:action="@{/login}" method="post">
+
+                <div class="form-group">
+                    <!--email instead of username because we login with our email but the login was originally configured through an username-->
+                    <label for="username" th:text="#{label.user.email}"></label>
+                    <input type="text"
+                           name="username"
+                           class="form-control"
+                           autofocus="autofocus"
+                           value="testnormal@test.com">
+                </div>
+                <div class="form-group">
+                    <label for="password" th:text="#{label.user.password}"></label>
+                    <input type="password"
+                           name="password"
+                           class="form-control"
+                           value="test">
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-6 col-sm-offset-3">
+                            <input type="submit"
+                                   name="login-submit"
+                                   class="form-control btn btn-info"
+                                   th:value="#{button.login}">
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+
+            <h1>Admin</h1>
+            <form th:action="@{/login}" method="post">
+                <div class="form-group">
+                    <!--email instead of username because we login with our email but the login was originally configured through an username-->
+                    <label for="username" th:text="#{label.user.email}"></label>
+                    <input type="text"
+                           name="username"
+                           class="form-control"
+                           autofocus="autofocus"
+                           value="test@test.com">
+                </div>
+                <div class="form-group">
+                    <label for="password" th:text="#{label.user.password}"></label>
+                    <input type="password"
+                           name="password"
+                           class="form-control"
+                           value="test">
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-6 col-sm-offset-3">
+                            <input type="submit"
+                                   name="login-submit"
+                                   class="form-control btn btn-info"
+                                   th:value="#{button.login}">
+                        </div>
+                    </div>
+                </div>
+            </form>
+
         </div>
     </div>
 

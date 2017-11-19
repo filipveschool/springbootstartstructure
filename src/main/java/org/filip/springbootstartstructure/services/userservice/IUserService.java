@@ -1,6 +1,7 @@
 package org.filip.springbootstartstructure.services.userservice;
 
 import org.filip.springbootstartstructure.domain.PasswordResetToken;
+import org.filip.springbootstartstructure.domain.Role;
 import org.filip.springbootstartstructure.domain.User;
 import org.filip.springbootstartstructure.domain.VerificationToken;
 import org.filip.springbootstartstructure.exceptions.UserAlreadyExistException;
@@ -32,6 +33,13 @@ public interface IUserService {
      * @param user
      */
     void saveRegisteredUser(User user);
+
+
+    User updateExistingUser(UserDto updatedAccountDto);
+
+    User updateExistingUserDirectly(User user);
+
+    User updateRolesOfUser(UserDto user, List<Role> roles);
 
 
     /**
@@ -68,6 +76,8 @@ public interface IUserService {
      * @throws IllegalArgumentException if {@code id} is {@literal null}.
      */
     Optional<User> findById(Long id);
+
+    User getOne(Long id);
 
     /**
      *
@@ -127,6 +137,12 @@ public interface IUserService {
      * @param user
      */
     void deleteUser(User user);
+
+    /**
+     * delete an existing user from the database by its id
+     * @param id
+     */
+    void deleteById(long id);
 
     /*************************************************
      * CUSTOM FUNCTIONS

@@ -74,10 +74,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/","/js/**","/css/**","/img/**","/webjars/**").permitAll()
                 .antMatchers("/users/index").permitAll()
                 //.antMatchers("/api/books/**", "/api/users/**").permitAll()
+                .antMatchers("/users/**").permitAll()
+                .antMatchers("/users*").permitAll()
+                .antMatchers("/users**").permitAll()
+                .antMatchers("/users/edit/**").permitAll()
+                .antMatchers("/users/update/**").permitAll()
                 .antMatchers(
                         "/login*",
                         "/mail/sendtest",
                         "/mail/",
+
 
                         "/logout*",
                         "/console",
@@ -131,12 +137,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationDetailsSource(authenticationDetailsSource)
                 .permitAll()
                 .and()
+                /*
                 .sessionManagement()
-                //.invalidSessionUrl("/invalidSession.html")
                 .invalidSessionUrl("/invalidSession")
                 .maximumSessions(1).sessionRegistry(sessionRegistry()).and()
                 .sessionFixation().none()
                 .and()
+                */
                 //https://docs.spring.io/spring-security/site/docs/5.0.0.BUILD-SNAPSHOT/reference/htmlsingle/#jc-logout
                 // Provides logout support. This is automatically applied when using WebSecurityConfigurerAdapter.
                 .logout()
@@ -144,9 +151,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(false)
                 //.clearAuthentication(true)
                 //The URL to redirect to after logout has occurred. The default is /login?logout.
-                .logoutSuccessUrl("/login?logout")
-                //.logoutSuccessUrl("/logout.html?logSucc=true")
-                //.logoutSuccessUrl("/logout?logSucc=true")
                 .logoutSuccessHandler(myLogoutSuccessHandler)
                 .deleteCookies("JSESSIONID")
                 .permitAll();

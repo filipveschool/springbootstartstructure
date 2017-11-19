@@ -1,14 +1,19 @@
 package org.filip.springbootstartstructure.web.dto;
 
+import org.filip.springbootstartstructure.domain.Role;
 import org.filip.springbootstartstructure.validation.annotations.PasswordMatches;
 import org.filip.springbootstartstructure.validation.annotations.ValidEmail;
 import org.filip.springbootstartstructure.validation.annotations.ValidPassword;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Collection;
 
 @PasswordMatches
 public class UserDto {
+
+    private Long id;
+
     @NotNull
     @Size(min = 1)
     private String firstName;
@@ -17,6 +22,11 @@ public class UserDto {
     @Size(min = 1)
     private String lastName;
 
+    @ValidEmail
+    @NotNull
+    @Size(min = 1)
+    private String email;
+
     @ValidPassword
     private String password;
 
@@ -24,12 +34,11 @@ public class UserDto {
     @Size(min = 1)
     private String matchingPassword;
 
-    @ValidEmail
-    @NotNull
-    @Size(min = 1)
-    private String email;
+    private boolean enabled;
 
-    private Integer role;
+    private String timezone;
+
+    private Collection<Role> roles;
 
     public String getFirstName() {
         return firstName;
@@ -71,18 +80,42 @@ public class UserDto {
         this.email = email;
     }
 
-    public Integer getRole() {
-        return role;
+    public Long getId() {
+        return id;
     }
 
-    public void setRole(Integer role) {
-        this.role = role;
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public String getTimezone() {
+        return timezone;
+    }
+
+    public void setTimezone(String timezone) {
+        this.timezone = timezone;
+    }
+
+    public Collection<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Collection<Role> roles) {
+        this.roles = roles;
     }
 
     @Override
     public String toString(){
         return "UserDto met: Firstname: " + firstName + " - lastname: " + lastName + " - password: " +password
-                + " - matchingPassword: " + matchingPassword + " - email: " + email + " - role: " + role;
+                + " - matchingPassword: " + matchingPassword + " - email: " + email;
     }
 }
 

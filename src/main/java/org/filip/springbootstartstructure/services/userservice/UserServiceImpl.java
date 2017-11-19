@@ -1,6 +1,7 @@
 package org.filip.springbootstartstructure.services.userservice;
 
 import org.filip.springbootstartstructure.domain.PasswordResetToken;
+import org.filip.springbootstartstructure.domain.Role;
 import org.filip.springbootstartstructure.domain.User;
 import org.filip.springbootstartstructure.domain.VerificationToken;
 import org.filip.springbootstartstructure.exceptions.UserAlreadyExistException;
@@ -95,6 +96,40 @@ public class UserServiceImpl implements IUserService {
         userRepository.save(user);
     }
 
+    @Override
+    public User updateExistingUser(UserDto updatedAccountDto){
+        System.out.println("");
+        User user = userRepository.findById(updatedAccountDto.getId()).get();
+
+        user.setFirstName(updatedAccountDto.getFirstName());
+        user.setLastName(updatedAccountDto.getLastName());
+        //user.setPassword(passwordEncoder.encode(accountDto.getPassword()));
+        //user.setPassword(updatedAccountDto.getPassword());
+        user.setEmail(updatedAccountDto.getEmail());
+        //user.setRoles(Arrays.asList(roleRepository.findByName(SecurityRole.ROLE_USER.getRoleName())));
+        //user.setRoles(updatedAccountDto.getRoles());
+        //user.setTimezone(updatedAccountDto.getTimezone());
+        //user.setEnabled(updatedAccountDto.isEnabled());
+
+        System.out.println("");
+
+        return userRepository.save(user);
+
+    }
+
+    @Override
+    public User updateExistingUserDirectly(User user){
+        return userRepository.save(user);
+    }
+
+    @Override
+    public User updateRolesOfUser(UserDto userDto, List<Role> roles){
+        User user = userRepository.findById(userDto.getId()).get();
+        user.setRoles(roles);
+        return userRepository.save(user);
+    }
+
+
     /**
      * Create a passwordResetToken for an existing user so that he can reset his password
      *
@@ -141,6 +176,12 @@ public class UserServiceImpl implements IUserService {
     public Optional<User> findById(Long id) {
         return userRepository.findById(id);
     }
+
+    @Override
+    public User getOne(Long id){
+        return userRepository.getOne(id);
+    }
+
 
     /**
      * @return Retrieve a list of all users in the database
@@ -242,6 +283,14 @@ public class UserServiceImpl implements IUserService {
             passwordResetTokenRepository.delete(passwordResetToken);
         }
         userRepository.delete(user);
+    }
+
+    /**
+     * delete an existing user from the database by its id
+     * @param id
+     */
+    public void deleteById(long id){
+        userRepository.deleteById(id);
     }
 
     /**

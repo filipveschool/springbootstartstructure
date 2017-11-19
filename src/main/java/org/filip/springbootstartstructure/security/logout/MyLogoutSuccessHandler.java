@@ -34,7 +34,8 @@ public class MyLogoutSuccessHandler implements LogoutSuccessHandler {
         }
 
         //response.sendRedirect("/logout.html?logSucc=true");
-        response.sendRedirect("/logout?logSucc=true");
+        //response.sendRedirect("/logout?logSucc=true");
+        response.sendRedirect("/login?logout");
 
     }
 }

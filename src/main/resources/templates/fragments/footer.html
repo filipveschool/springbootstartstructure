@@ -7,17 +7,21 @@
         <div class="container">
             <p>
                 &copy; FilipVandenEynde.com
-                <span sec:authorize="isAuthenticated()" style="display: inline-block;">
-                    <!--| Logged user: <span sec:authentication="name"></span> |-->
-                    <!--Roles: <span sec:authentication="principal.authorities"></span> |-->
-                    <a th:href="@{/logout}">Sign Out</a>
-                </span>
+
+                <a sec:authorize="isAuthenticated()" class="nav-link" href="javascript: document.logoutForm.submit()">Logout
+                    post</a>
+            <form name="logoutForm2" th:action="@{/logout}" method="post" th:hidden="true">
+                <input hidden type="submit" value="Sign Out">
+            </form>
+
             </p>
         </div>
     </footer>
 
     <script type="text/javascript" th:src="@{/webjars/jquery/3.2.1/jquery.min.js/}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"
+            integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"
+            crossorigin="anonymous"></script>
     <script type="text/javascript" th:src="@{/webjars/bootstrap/4.0.0-beta.2/js/bootstrap.min.js}"></script>
 
 </th:block>

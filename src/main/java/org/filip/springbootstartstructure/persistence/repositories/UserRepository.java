@@ -3,6 +3,7 @@ package org.filip.springbootstartstructure.persistence.repositories;
 import org.filip.springbootstartstructure.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +27,17 @@ public interface UserRepository extends JpaRepository<User, Long> {
      */
     @Override
     Optional<User> findById(Long id);
+
+    /**
+     * Returns a reference to the entity with the given identifier.
+     *
+     * @param id must not be {@literal null}.
+     * @return a reference to the entity with the given identifier.
+     * @see EntityManager#getReference(Class, Object)
+     * @throws javax.persistence.EntityNotFoundException if no entity exists for given {@code id}.
+     */
+    @Override
+    User getOne(Long id);
 
     // All get functions
 

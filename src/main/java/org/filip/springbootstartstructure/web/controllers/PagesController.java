@@ -62,4 +62,8 @@ public class PagesController {
     }
 
 
+    @GetMapping(value = "/console")
+    public String goToConsole(){
+        return "console";
+    }
 }

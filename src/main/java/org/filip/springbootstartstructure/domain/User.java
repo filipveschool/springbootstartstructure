@@ -1,12 +1,14 @@
 package org.filip.springbootstartstructure.domain;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.filip.springbootstartstructure.validation.annotations.ValidEmail;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -20,19 +22,16 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @NotEmpty(message = "{NotEmpty.user.firstName}")
+    @NotNull
     private String firstName;
 
-    @NotEmpty(message = "{NotEmpty.user.lastName}")
+    @NotNull
     private String lastName;
 
-    @Email(message = "{Email.user.email}")
-    @NotEmpty(message = "*Please provide an email")
+    @ValidEmail
+    @NotNull
     @Column(nullable = false, unique = true)
     private String email;
-
-    //@Column(nullable = false, unique = true)
-    //private String username;
 
     @Column(length = 60)
     private String password;
