@@ -15,6 +15,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -78,7 +79,7 @@ public class UserController {
      * @return
      */
     @GetMapping("/users/create")
-    public String addNewUser(Model model) {
+    public String createNewUser(Model model) {
         model.addAttribute("user", new User());
         return "crud/user/create";
     }
@@ -88,7 +89,7 @@ public class UserController {
      *
      * @return
      */
-    @PostMapping("/users/saveUser")
+    @PostMapping("/users/save")
     public String saveNewUser(@Valid User user) {
         System.out.println(user.toString());
         userService.saveRegisteredUser(user);
@@ -133,18 +134,15 @@ public class UserController {
         return "crud/user/edit";
     }
 
-    @PostMapping("/users/edit")
-    public String useraccountSubmit(@ModelAttribute UserDto user){
-        System.out.println(user.toString());
-        return "redirect:/" + PageConstants.OVERVIEW_ALL_USERS_URL;
-
-    }
-
     @PostMapping("/users/update")
     //@PostMapping("/users/update/{id}")
     //@PostMapping("/users/update/{user}")
     //public String updateUser(@ModelAttribute("user") @Valid UserDto userDto) {
-    public String updateUser(@ModelAttribute UserDto user) {
+    public String updateUser(@ModelAttribute UserDto user, BindingResult result) {
+
+        if(result.hasErrors()){
+            return "crud/users/edit";
+        }
 
         userService.updateExistingUser(user);
         return "redirect:/" + PageConstants.OVERVIEW_ALL_USERS_URL;
